@@ -1,0 +1,51 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id "com.palantir.docker" version "0.25.0"
+}
+
+group = 'com.test'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.modelmapper:modelmapper:2.3.5'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+docker {
+    name "test-restaurant:${version}"
+    tag 'version', "test-restaurant:${version}"
+    tag 'latest', "test-restaurant:latest"
+
+    copySpec.with {
+        from('build/libs') {
+            into 'build/libs'
+        }
+    }
+}
+
+task cleanDistributions (type: Delete) {
+    doFirst {
+        delete fileTree('build/libs')
+    }
+}
+
+task buildAndPublish (dependsOn: [build]) {
+    finalizedBy dockerTagsPush
+    group 'build'
+}
+
+test {
+    useJUnitPlatform()
+}
