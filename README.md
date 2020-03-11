@@ -95,11 +95,29 @@ There are several example requests
   
 
 ## Building for production
+
+### Packaging as jar
+
 To build the final jar run:
 
 ```
 $ ./gradlew clean bootJar
 ```
+## Run
+To run the application:
+
+```
+$ ./gradlew clean bootRun
+```
+
+## Testing
+
+To run tests:
+
+```
+$ ./gradlew clean test
+```
+
 ## Docker
 
 Docker image can be created and pushed to dockerhub via gradle task buildAndPublish
