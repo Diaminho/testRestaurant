@@ -94,12 +94,18 @@ There are several example requests
   Result wil be ResponseEntity with 200 status and empty body
   
 
+## Building for production
+Packaging as jar
+To build the final jar run:
+
+./gradlew clean bootJar
+
 ## Docker
 
 Docker image can be created and pushed to dockerhub via gradle task buildAndPublish
 
 ```
-$ ./gradlew buildAndPublish
+$ ./gradlew clean buildAndPublish
 ```
 For running docker container with created image the following command can be used
 
