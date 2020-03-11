@@ -95,7 +95,6 @@ There are several example requests
   
 
 ## Building for production
-Packaging as jar
 To build the final jar run:
 
 ```
