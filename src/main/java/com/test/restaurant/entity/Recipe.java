@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "recipe")
+@Table(name = "recipes")
 public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class Recipe implements Serializable {
     private String name;
 
     @NotBlank
-    @Size(min = 1, max = 40)
-    @Column(name = "description", length = 40, nullable = false)
+    @Size(min = 1, max = 100)
+    @Column(name = "description", length = 100, nullable = false)
     private String description;
 
 

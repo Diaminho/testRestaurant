@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "ingredient")
+@Table(name = "ingredients")
 public class Ingredient implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Ingredient implements Serializable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="recipe_id")
+    @JoinColumn(name="recipe_id", nullable = false)
     @JsonIgnore
     private Recipe recipe;
 

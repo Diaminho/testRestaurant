@@ -8,7 +8,6 @@ import com.test.restaurant.repository.RecipeRepository;
 import com.test.restaurant.service.IngredientService;
 import com.test.restaurant.service.RecipeService;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,11 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -33,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = RestaurantApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@ActiveProfiles(profiles = "test")
 public class IngredientControllerTests {
 
     @Autowired
@@ -70,12 +69,10 @@ public class IngredientControllerTests {
     @BeforeAll
     public void initTest() {
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
         recipe.setName("REC1");
         recipe.setDescription("Desc");
         recipeRepository.save(recipe);
         Recipe recipe2 = new Recipe();
-        recipe2.setId(2L);
         recipe2.setName("REC2");
         recipe2.setDescription("Desc2");
         recipeRepository.save(recipe2);
@@ -170,7 +167,7 @@ public class IngredientControllerTests {
     @Test
     @Transactional
     public void createIngredient() throws Exception {
-        final String json = "{\"name\": \"NEW\"}";
+        final String json = "{\"name\": \"NEW\", \"recipe\": {\"id\": 1}}";
         // Create ingredient
         restCategoryMockMvc.perform(post("/ingredients")
                 .contentType(MediaType.APPLICATION_JSON).content(json))

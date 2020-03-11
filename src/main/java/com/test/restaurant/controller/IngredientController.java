@@ -1,6 +1,7 @@
 package com.test.restaurant.controller;
 
 import com.test.restaurant.entity.Ingredient;
+import com.test.restaurant.entity.Recipe;
 import com.test.restaurant.service.IngredientService;
 import com.test.restaurant.service.RecipeService;
 import com.test.restaurant.service.dto.IngredientDTO;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -69,6 +71,9 @@ public class IngredientController {
     public ResponseEntity<IngredientDTO> createIngredient(@RequestBody @Valid IngredientDTO ingredientDTO) {
         log.debug("REST request to create Ingredient");
         final Ingredient ingredient = convertToEntity(ingredientDTO);
+        if (ingredient == null) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
         final IngredientDTO saved = convertToDto(ingredientService.save(ingredient));
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
@@ -89,6 +94,9 @@ public class IngredientController {
         }
         ingredientDTO.setId(id);
         final Ingredient ingredient = convertToEntity(ingredientDTO);
+        if (ingredient == null) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
         final IngredientDTO updated = convertToDto(ingredientService.save(ingredient));
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
@@ -115,13 +123,15 @@ public class IngredientController {
         return modelMapper.map(ingredient, IngredientDTO.class);
     }
 
-    private Ingredient convertToEntity(IngredientDTO ingredientDTO) {
-        Ingredient ingredient = modelMapper.map(ingredientDTO, Ingredient.class);
-        if (ingredientDTO.getRecipe() == null) {
-            ingredient.setRecipe(null);
-        } else if (ingredientDTO.getId() != null) {
-            ingredient.setRecipe(recipeService.findById(ingredientDTO.getRecipe().getId()));
+    private Ingredient convertToEntity(IngredientDTO ingredientDTO)  {
+        final Ingredient ingredient = modelMapper.map(ingredientDTO, Ingredient.class);
+        final Long recipeId = ingredientDTO.getRecipe().getId();
+        final Recipe foundRecipe = recipeService.findById(recipeId);
+        if (foundRecipe == null) {
+            log.error("Cannot found recipe with id: " + recipeId);
+            return null;
         }
+        ingredient.setRecipe(foundRecipe);
         return ingredient;
     }
 

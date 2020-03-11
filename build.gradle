@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.test'
-version = '0.0.1-SNAPSHOT'
+version = new Date().format('yyyy_MM_dd_HHmm')
 sourceCompatibility = '11'
 
 repositories {
@@ -24,9 +24,9 @@ dependencies {
 }
 
 docker {
-    name "test-restaurant:${version}"
-    tag 'version', "test-restaurant:${version}"
-    tag 'latest', "test-restaurant:latest"
+    name "diaminho/test-restaurant:${version}"
+    tag 'version', "diaminho/test-restaurant:${version}"
+    tag 'latest', "diaminho/test-restaurant:latest"
 
     copySpec.with {
         from('build/libs') {
