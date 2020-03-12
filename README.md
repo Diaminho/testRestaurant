@@ -53,7 +53,7 @@ There are several example requests
 - **Create ingredient**
 
   ```
-  $ curl -X POST http://localhost:8080/ingredients --data '{"name":"TEST","description":"descr","recipe":{"id":1}}' --header 'Content-Type: application/json' 
+  $ curl -X POST http://localhost:8080/ingredients --data '{"name":"TEST","recipe":{"id":1}}' --header 'Content-Type: application/json' 
   ```
   Result
   
@@ -71,7 +71,7 @@ There are several example requests
 - **Update existing ingredient**
 
   ```
-  $ curl -X PUT http://localhost:8080/ingredients/5 --data '{"name":"TEST_NEW","description":"descr","recipe":{"id":2}}' --header 'Content-Type: application/json' 
+  $ curl -X PUT http://localhost:8080/ingredients/5 --data '{"name":"TEST_NEW","recipe":{"id":2}}' --header 'Content-Type: application/json' 
   ```
   Result
   
